@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="ABO QUICKPASS" Language="1033" Version="1.0.0.0" Manufacturer="BBCS, Yo!" UpgradeCode="e318f78c-6af3-4867-8db8-685f64901aa4">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<Media Id="1" Cabinet="product.cab" EmbedCab="yes" />
+<!--These will reference the components so the installer knows how to install the files--> 
+		<Feature Id="ProductFeature" Title="Product" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentGroupRef Id="DynamicFile" />
+			<ComponentRef Id="CMP_DocumentationShortcut" />
+			<ComponentRef Id="DesktopFolderShortCut" />
+			
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="ABOSUITE" Name="ABO SUITE">
+					<Directory Id="INSTALLFOLDER" Name="ABO QUICKPASS">
+						<!--Leave this part blank, only directory tags and components should go here-->
+					
+					
+						<Directory Id="DesktopFolder" />     					
+						<Directory Id="ProgramMenuFolder">
+						  <Directory Id="MyShortcutsDir" Name="1 ABO QuickPass" />
+						</Directory>					
+					</Directory>
+				</Directory>		
+			</Directory>
+		</Directory>
+		
+<Icon Id="icon.ico" SourceFile="banana.ico"/>
+
+<!--Start Menu-->
+<DirectoryRef Id="MyShortcutsDir">
+  <Component Id="CMP_DocumentationShortcut"
+			 Guid="5AED4DE8-FEFF-4164-BC41-9B29EED6094B">
+
+	<Shortcut Id="DocumentationStartMenuShortcut"
+			  Name="BBCS Banana Shortcut"
+			  Description="Read Awesome Software Documentation"
+			  Target="[INSTALLFOLDER]SRQ.jar"
+			  WorkingDirectory="INSTALLFOLDER"
+			  Icon="icon.ico"/>
+
+	<Shortcut Id="UninstallShortcut"
+			  Name="Uninstall InstallPractice"
+			  Description="Uninstalls Awesome Software"
+			  Target="[SystemFolder]msiexec.exe"
+			  Arguments="/x [ProductCode]" />
+
+	<RemoveFolder Id="RemoveMyShortcutsDir"
+				  On="uninstall" />
+
+	<RegistryValue Root="HKCU"
+				   Key="Software\Microsoft\AwesomeSoftware"
+				   Name="installed"
+				   Type="integer"
+				   Value="1"
+				   KeyPath="yes" />
+  </Component>
+</DirectoryRef>	
+
+<DirectoryRef Id="DesktopFolder"><!--Local this-->
+  <Component Id="DesktopFolderShortCut"
+			 Guid="{AF79F40A-2142-4292-806F-67D69BA1B099}">
+
+	<Shortcut Id="DocumentationDeskTopShortcut"
+			  Name="BBCS Banana Shortcut"
+			  Description="Read Awesome Software Documentation"
+			  Target="[INSTALLFOLDER]SRQ.jar"
+			  WorkingDirectory="INSTALLFOLDER"
+			  Icon="icon.ico"/>
+
+	<Shortcut Id="UninstallDeskTopShortcut"
+			  Name="Uninstall InstallPractice"
+			  Description="Uninstalls Awesome Software"
+			  Target="[SystemFolder]msiexec.exe"
+			  Arguments="/x [ProductCode]" />
+
+	<RemoveFolder Id="RemoveMyDesktopShortcutsDir"
+				  On="uninstall" />
+
+	<RegistryValue Root="HKCU"
+				   Key="Software\Microsoft\AwesomeSoftware"
+				   Name="installed"
+				   Type="integer"
+				   Value="1"
+				   KeyPath="yes" />
+  </Component>
+</DirectoryRef>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+		</ComponentGroup>
+	</Fragment>
+</Wix>
